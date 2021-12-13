@@ -17,12 +17,14 @@ import { Profile } from '../../components/Profile';
 import { COLLECTION_APPOINTMENTS } from '../../configs/database';
 import { styles } from './styles';
 import { Load } from '../../components/Load';
+import { ModalLogout } from '../../components/ModalLogout';
 
 type authHomeProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 export function Home() {
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(true);
+  const [openModalLogout, SetOpenModalLogout] = useState(false);
   const [appointments, setAppointments] = useState<AppointmentProps[]>([]);
 
   const navigation = useNavigation<authHomeProp>();
@@ -37,6 +39,14 @@ export function Home() {
 
   function handleAppointmentCreate() {
     navigation.navigate('AppointmentCreate');
+  }
+
+  function handleOpenModalLogout() {
+    SetOpenModalLogout(true);
+  }
+
+  function handleCloseModalLogout() {
+    SetOpenModalLogout(false);
   }
 
   async function loadAppointments() {
@@ -59,7 +69,7 @@ export function Home() {
   return (
     <Background>
       <View style={styles.header}>
-        <Profile />
+        <Profile openModal={handleOpenModalLogout} />
         <ButtonAdd onPress={handleAppointmentCreate} />
       </View>
       
@@ -92,6 +102,11 @@ export function Home() {
       />
       </>
     }
+
+    <ModalLogout
+      visible={openModalLogout}
+      closeModal={handleCloseModalLogout}
+    />
 
     </Background>
   );
